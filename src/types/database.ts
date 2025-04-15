@@ -38,7 +38,7 @@ export interface Flight {
 
 export interface Passenger {
   id: string;
-  user_id: string;
+  user_id: string | null;
   name: string;
   email: string;
   phone: string | null;
