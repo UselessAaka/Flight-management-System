@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -226,7 +227,7 @@ const FlightsPage = () => {
                           <FormItem>
                             <FormLabel>Departure Time</FormLabel>
                             <FormControl>
-                              <Input type="datetime-local" {...field} />
+                              <Input type="datetime-local" step="60" {...field} />
                             </FormControl>
                           </FormItem>
                         )}
@@ -239,7 +240,7 @@ const FlightsPage = () => {
                           <FormItem>
                             <FormLabel>Arrival Time</FormLabel>
                             <FormControl>
-                              <Input type="datetime-local" {...field} />
+                              <Input type="datetime-local" step="60" {...field} />
                             </FormControl>
                           </FormItem>
                         )}
