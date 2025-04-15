@@ -10,3 +10,142 @@ const SUPABASE_PUBLISHABLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiO
 // import { supabase } from "@/integrations/supabase/client";
 
 export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+// Function to populate sample data for Indian context
+export const populateIndianData = async () => {
+  try {
+    // Check if data exists already
+    const { data: airlines } = await supabase.from('airline').select('*');
+    if (airlines && airlines.length > 0) {
+      console.log('Data already exists, skipping population');
+      return;
+    }
+
+    // Add Indian airlines
+    const airlinesData = [
+      { name: 'Air India', code: 'AI', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Air_India_Logo.svg/1200px-Air_India_Logo.svg.png' },
+      { name: 'IndiGo', code: '6E', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/IndiGo_Airlines_logo.svg/1280px-IndiGo_Airlines_logo.svg.png' },
+      { name: 'SpiceJet', code: 'SG', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/SpiceJet_logo.svg/1280px-SpiceJet_logo.svg.png' },
+      { name: 'Vistara', code: 'UK', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Vistara_Logo.svg/1200px-Vistara_Logo.svg.png' },
+      { name: 'Air Asia India', code: 'I5', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/AirAsia_New_Logo.svg/1200px-AirAsia_New_Logo.svg.png' }
+    ];
+    
+    await supabase.from('airline').insert(airlinesData);
+    
+    // Add Indian airports
+    const airportsData = [
+      { airport_code: 'DEL', name: 'Indira Gandhi International Airport', city: 'Delhi', location: 'North India' },
+      { airport_code: 'BOM', name: 'Chhatrapati Shivaji Maharaj International Airport', city: 'Mumbai', location: 'West India' },
+      { airport_code: 'MAA', name: 'Chennai International Airport', city: 'Chennai', location: 'South India' },
+      { airport_code: 'BLR', name: 'Kempegowda International Airport', city: 'Bengaluru', location: 'South India' },
+      { airport_code: 'HYD', name: 'Rajiv Gandhi International Airport', city: 'Hyderabad', location: 'South India' },
+      { airport_code: 'CCU', name: 'Netaji Subhas Chandra Bose International Airport', city: 'Kolkata', location: 'East India' }
+    ];
+    
+    await supabase.from('airport').insert(airportsData);
+    
+    // Add baggage allowances
+    const baggageAllowances = [
+      { checked_baggage: '15 kg', extra_baggage_fee: 500, cabin_baggage: '7 kg' },
+      { checked_baggage: '20 kg', extra_baggage_fee: 750, cabin_baggage: '8 kg' },
+      { checked_baggage: '25 kg', extra_baggage_fee: 1000, cabin_baggage: '10 kg' }
+    ];
+    
+    await supabase.from('baggage_allowance').insert(baggageAllowances);
+    
+    // Fetch the airline and baggage allowance IDs
+    const { data: airlineData } = await supabase.from('airline').select('*');
+    const { data: baggageData } = await supabase.from('baggage_allowance').select('*');
+    
+    if (!airlineData || !baggageData) return;
+    
+    // Add flights
+    const flightsData = [
+      {
+        airline_id: airlineData[0].id,
+        flight_number: 'AI123',
+        departure_time: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(), // tomorrow
+        arrival_time: new Date(Date.now() + 24 * 60 * 60 * 1000 + 2.5 * 60 * 60 * 1000).toISOString(), // 2.5h later
+        source_airport: 'DEL',
+        destination_airport: 'BOM',
+        aircraft: 'Airbus A320',
+        total_seats: 180,
+        available_seats: 120,
+        price: 5999,
+        status: 'scheduled'
+      },
+      {
+        airline_id: airlineData[1].id,
+        flight_number: '6E456',
+        departure_time: new Date(Date.now() + 36 * 60 * 60 * 1000).toISOString(), // 36h later
+        arrival_time: new Date(Date.now() + 36 * 60 * 60 * 1000 + 3 * 60 * 60 * 1000).toISOString(), // 3h later
+        source_airport: 'BLR',
+        destination_airport: 'DEL',
+        aircraft: 'Airbus A320neo',
+        total_seats: 186,
+        available_seats: 150,
+        price: 6999,
+        status: 'scheduled'
+      },
+      {
+        airline_id: airlineData[2].id,
+        flight_number: 'SG789',
+        departure_time: new Date(Date.now() + 48 * 60 * 60 * 1000).toISOString(), // 48h later
+        arrival_time: new Date(Date.now() + 48 * 60 * 60 * 1000 + 1.5 * 60 * 60 * 1000).toISOString(), // 1.5h later
+        source_airport: 'MAA',
+        destination_airport: 'HYD',
+        aircraft: 'Boeing 737-800',
+        total_seats: 189,
+        available_seats: 160,
+        price: 4599,
+        status: 'scheduled'
+      },
+      {
+        airline_id: airlineData[3].id,
+        flight_number: 'UK101',
+        departure_time: new Date(Date.now() + 60 * 60 * 60 * 1000).toISOString(), // 60h later
+        arrival_time: new Date(Date.now() + 60 * 60 * 60 * 1000 + 2 * 60 * 60 * 1000).toISOString(), // 2h later
+        source_airport: 'DEL',
+        destination_airport: 'CCU',
+        aircraft: 'Boeing 787 Dreamliner',
+        total_seats: 256,
+        available_seats: 200,
+        price: 7999,
+        status: 'scheduled'
+      },
+      {
+        airline_id: airlineData[4].id,
+        flight_number: 'I5555',
+        departure_time: new Date(Date.now() + 72 * 60 * 60 * 1000).toISOString(), // 72h later
+        arrival_time: new Date(Date.now() + 72 * 60 * 60 * 1000 + 1.75 * 60 * 60 * 1000).toISOString(), // 1.75h later
+        source_airport: 'BOM',
+        destination_airport: 'BLR',
+        aircraft: 'Airbus A320',
+        total_seats: 180,
+        available_seats: 170,
+        price: 5499,
+        status: 'scheduled'
+      }
+    ];
+    
+    await supabase.from('flight').insert(flightsData);
+    
+    // Add passengers
+    const passengersData = [
+      { name: 'Rahul Sharma', email: 'rahul.sharma@example.com', phone: '+91 98765 43210', passport_number: 'J1234567' },
+      { name: 'Priya Patel', email: 'priya.patel@example.com', phone: '+91 87654 32109', passport_number: 'K2345678' },
+      { name: 'Amit Singh', email: 'amit.singh@example.com', phone: '+91 76543 21098', passport_number: 'L3456789' },
+      { name: 'Sneha Gupta', email: 'sneha.gupta@example.com', phone: '+91 65432 10987', passport_number: 'M4567890' },
+      { name: 'Vikram Reddy', email: 'vikram.reddy@example.com', phone: '+91 54321 09876', passport_number: 'N5678901' }
+    ];
+    
+    await supabase.from('passenger').insert(passengersData);
+    
+    console.log('Sample data populated successfully');
+  } catch (error) {
+    console.error('Error populating sample data:', error);
+  }
+};
+
+// Call once when the app starts
+populateIndianData();

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -292,7 +291,7 @@ const FlightsPage = () => {
                         name="price"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Price ($)</FormLabel>
+                            <FormLabel>Price (₹)</FormLabel>
                             <FormControl>
                               <Input type="number" {...field} />
                             </FormControl>
@@ -383,7 +382,7 @@ const FlightsPage = () => {
                       </span>
                     </TableCell>
                     <TableCell>{flight.available_seats}/{flight.total_seats}</TableCell>
-                    <TableCell>${flight.price}</TableCell>
+                    <TableCell>₹{flight.price}</TableCell>
                   </TableRow>
                 ))
               )}
