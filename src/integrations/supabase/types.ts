@@ -130,6 +130,33 @@ export type Database = {
           },
         ]
       }
+      booking_log: {
+        Row: {
+          action: string | null
+          action_time: string | null
+          booking_id: string | null
+          flight_id: string | null
+          log_id: string
+          passenger_id: string | null
+        }
+        Insert: {
+          action?: string | null
+          action_time?: string | null
+          booking_id?: string | null
+          flight_id?: string | null
+          log_id?: string
+          passenger_id?: string | null
+        }
+        Update: {
+          action?: string | null
+          action_time?: string | null
+          booking_id?: string | null
+          flight_id?: string | null
+          log_id?: string
+          passenger_id?: string | null
+        }
+        Relationships: []
+      }
       flight: {
         Row: {
           aircraft: string
@@ -230,6 +257,30 @@ export type Database = {
         }
         Relationships: []
       }
+      table_name: {
+        Row: {
+          data: Json | null
+          id: number
+          inserted_at: string
+          name: string | null
+          updated_at: string
+        }
+        Insert: {
+          data?: Json | null
+          id?: number
+          inserted_at?: string
+          name?: string | null
+          updated_at?: string
+        }
+        Update: {
+          data?: Json | null
+          id?: number
+          inserted_at?: string
+          name?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       ticket: {
         Row: {
           booking_id: string
@@ -264,7 +315,25 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      cancel_flight: {
+        Args: { flight_id: string }
+        Returns: undefined
+      }
+      get_flights_by_airline: {
+        Args: { airline_code: string }
+        Returns: {
+          flight_number: string
+          departure_time: string
+          arrival_time: string
+        }[]
+      }
+      passengers_on_flight: {
+        Args: { flight_no: string }
+        Returns: {
+          name: string
+          email: string
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never
